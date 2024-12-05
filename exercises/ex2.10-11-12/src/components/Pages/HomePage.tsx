@@ -1,15 +1,18 @@
 import PageTitle from "../PageTitle";
+import { useOutletContext } from "react-router-dom";
+import { MoviesContext } from "../../types";
+import MyMovieTitleDetails from "../MyMovieTitleDetails";
 
 const HomePage = () => {
+    const{ movies } : MoviesContext = useOutletContext();
+
     return (
         <div>
             <PageTitle title="Welcome to iMovie" />
             <p>
-                iMovie is a Web App that shows a list of your personal movie added
+                My favorite Movies Title
             </p> <br />
-            <p>
-               iMovie also shows movies at the Cinema 
-            </p>
+            <MyMovieTitleDetails movie={movies} />
         </div>
     );
 }
