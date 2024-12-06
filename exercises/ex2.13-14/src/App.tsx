@@ -1,20 +1,23 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
 
 interface JokeProps {
-  joke : string,
-  category : string
-};
+  joke: string;
+  category: string;
+}
 
 function App() {
-  const[joke, setJoke] = useState<JokeProps | undefined>(undefined);
+  const [joke, setJoke] = useState<JokeProps | undefined>(undefined);
 
-  useEffect(() => {
-    fetch("https://v2.jokeapi.dev/joke/Any?blacklistFlags=religious&type=single")
+
+  const fetchJoke = () => {
+    fetch(
+      "https://v2.jokeapi.dev/joke/Any?blacklistFlags=religious&type=single"
+    )
     .then((response) => {
-      if(!response.ok)
+      if (!response.ok)
         throw new Error(
-        `fetch error : ${response.status} : ${response.statusText} `
+          `fetch error : ${response.status} : ${response.statusText} `
         );
       return response.json();
     })
@@ -24,7 +27,14 @@ function App() {
         category: data.category ?? "Unknown",
       });
     });
-  },[])
+  }
+
+  useEffect(() => {
+    fetchJoke();
+    const interval = setInterval(fetchJoke, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div>
@@ -32,7 +42,7 @@ function App() {
       <h3>Category : {joke?.category} </h3>
       <p>The Joke is : {joke?.joke} </p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
